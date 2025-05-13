@@ -1,0 +1,746 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="description" content="Matching Anything with A Single Feature.">
+    <meta name="keywords" content="MATCHA">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>MATCHA: Towards Matching Anything</title>
+
+    <link rel="icon" type="image/x-icon" href="static/images/matcha_icon.png">
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-PYVRSFMDRL"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag() {
+            dataLayer.push(arguments);
+        }
+
+        gtag('js', new Date());
+
+        gtag('config', 'G-PYVRSFMDRL');
+    </script>
+
+    <meta property="og:image" content="https://matcha.github.io/static/images/matcha_icon.png">
+    <meta property="og:image:type" content="image/png">
+    <meta property="og:type" content="website">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="MATCHA: Towards Matching Anything">
+    <meta name="twitter:description"
+        content="Matching Anything with A Single Feature.">
+    <meta name="twitter:image" content="https://matcha.github.io/static/images/matcha_icon.png">
+    <link href="https://fonts.googleapis.com/css?family=Google+Sans:400,600|Noto+Sans:400,600|Castoro:400,600"
+        rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/modern-normalize@3.0.1/modern-normalize.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/tabler-icons/3.19.0/tabler-icons-outline.min.css"
+        rel="stylesheet" />
+    <link rel="stylesheet" href="./static/css/bulma.min.css">
+    <link rel="stylesheet" href="./static/css/bulma-carousel.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.8.2/css/bulma.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma-carousel@4.0.4/dist/css/bulma-carousel.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.4/css/bulma.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma-carousel@4.0.3/dist/css/bulma-carousel.min.css">
+    <link rel="stylesheet" href="./static/css/fontawesome.all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+    <link rel="stylesheet" href="./static/css/index.css">
+    <script type="module" src="https://cdn.jsdelivr.net/npm/@google/model-viewer@latest/dist/model-viewer.js"></script>
+    <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
+    <script nomodule src="https://unpkg.com/@google/model-viewer/dist/model-viewer-legacy.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script defer src="./static/js/fontawesome.all.min.js"></script>
+    <script defer src="./static/js/bulma-carousel.min.js"></script>
+    <script defer src="./static/js/index.js"></script>
+    <script defer src="./static/js/lazy.js"></script>
+    <style>
+        .center-image {
+            display: block;
+            margin: 0 auto;
+        }
+
+
+        .blend-img-item {
+            background: #f5f5f5;
+        }
+
+        .item {
+            margin: 10px;
+        }
+
+        .blend-img-background {
+            mix-blend-mode: multiply;
+        }
+
+        #interactive {
+            position: relative;
+            display: inline-block;
+            width: 768px;
+            aspect-ratio: 16/9;
+            max-width: 100%;
+            border: 2px solid #fff;
+            border-radius: 6px;
+            overflow: hidden;
+            box-shadow: 0 0 4px #000;
+
+        }
+
+        #interactive canvas,
+        #interactive #glfailed,
+        #interactive #loading {
+            display: block;
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            touch-action: none;
+        }
+
+        #interactive #glfailed {
+            color: #f88;
+            background: black;
+            display: none;
+        }
+
+        #interactive #loading {
+            color: #000;
+            font-size: 32px;
+            font-weight: bold;
+            background: rgba(255, 255, 255, 0.8);
+            display: none;
+        }
+
+        .iframe-container {
+            width: 50%;
+            max-width: 32em;
+        }
+
+        .vframe {
+            border-radius: 0.5em;
+            width: 100%;
+            height: auto;
+            aspect-ratio: 32 / 27.5;
+            max-width: 32em;
+            max-height: 27.5em;
+            border: none;
+            box-shadow: 0 0 1em 0em rgba(0, 0, 0, 0.15);
+        }
+
+        .large-vframe {
+            border-radius: 0.5em;
+            width: 100%;
+            height: auto;
+            aspect-ratio: 32 / 18;
+            max-width: 64em;
+            max-height: 36em;
+            border: none;
+            box-shadow: 0 0 1em 0em rgba(0, 0, 0, 0.15);
+        }
+
+        button {
+            display: block;
+            width: 100%;
+            padding: 10px 0;
+            margin-top: 10px;
+            cursor: pointer;
+        }
+
+        .modelviewer-container {
+            width: 50%;
+            max-width: 32em;
+        }
+
+        model-viewer {
+            border-radius: 0.5em;
+            width: 100%;
+            max-width: 32em;
+            max-height: 27.5em;
+            height: auto;
+            aspect-ratio: 32 / 27.5;
+            border: none;
+            box-shadow: 0 0 1em 0em rgba(0, 0, 0, 0.15);
+        }
+
+        .siframe-class {
+            display: flex;
+            flex-wrap: nowrap;
+            justify-content: center;
+            gap: 1vw;
+            padding: 1vw;
+            align-items: start;
+        }
+
+        .siframe-class .image-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            grid-template-rows: repeat(2, 1fr);
+            gap: 1vw;
+            flex: 1 0 40%;
+            max-width: 384px;
+        }
+
+        .siframe-class .image-grid img {
+            width: 100%;
+            height: auto;
+            object-fit: cover;
+        }
+
+        .siframe-class .iframe-container {
+            flex: 1 0 60%;
+            max-width: 640px;
+        }
+
+        .siframe-class iframe {
+            width: 100%;
+            border-radius: 0.5em;
+            max-width: 640px;
+            height: auto;
+            aspect-ratio: 5 / 4;
+            border: none;
+            box-shadow: 0 0 1em 0em rgba(0, 0, 0, 0.15);
+        }
+
+        @media (max-width: 768px) {
+
+            .large-vframe {
+                width: 100%;
+            }
+
+            .iframe-container {
+                width: 100%;
+            }
+
+            model-viewer {
+                max-width: 100%;
+                margin: 0 auto;
+            }
+        }
+
+        .load img {
+            width: 100px;
+            height: 70px;
+            object-fit: cover;
+            margin: 4px;
+            border: 2px solid #fff;
+            box-shadow: 0 0 4px #888;
+            border-radius: 6px;
+            vertical-align: bottom;
+        }
+
+        .load img:active {
+            box-shadow: 0 0 4px #000;
+            opacity: .8;
+        }
+
+        .megabuttons {
+            position: absolute;
+            left: 5px;
+            bottom: 5px;
+            text-transform: uppercase;
+            text-align: left;
+        }
+
+        nav {
+            text-align: center;
+        }
+
+        nav ul {
+            list-style: none;
+            padding: 0;
+            margin: 20px auto;
+            display: flex;
+            justify-content: center;
+            align-items: stretch;
+            width: 100%;
+            gap: 10px;
+        }
+
+        nav ul li {
+            flex: 1;
+            display: flex;
+            margin: 0;
+        }
+
+        nav ul li a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #f5f5f5;
+            color: #363636;
+            padding: 10px 20px;
+            text-decoration: none;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            min-height: 50px;
+            flex-grow: 1;
+            box-sizing: border-box;
+            overflow: hidden;
+        }
+
+
+        nav ul li a:hover {
+            background-color: #e4e4e4;
+            transform: scale(1.05);
+        }
+
+        nav ul li a:active {
+            background-color: #d3d3d3;
+            transform: scale(0.95);
+        }
+
+        nav ul li a.active {
+            background-color: #cccccc; /* Change color to indicate active tab */
+            color: #000000; /* Optional: Change text color if needed */
+        }
+
+
+        .dynamic-section {
+            display: none;
+            padding: 1rem 0;
+        }
+
+
+
+        .grid-container-2x6 {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            grid-template-rows: repeat(2, auto);
+            gap: 10px;
+            padding: 20px;
+            max-width: 80%;
+            margin: auto;
+        }
+
+        .grid-container-2x6 img {
+            width: 100%;
+            height: auto;
+        }
+
+        .grid-container-1x6 {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            grid-template-rows: repeat(1, auto);
+            gap: 10px;
+            padding: 20px;
+            max-width: 80%;
+            margin: auto;
+        }
+
+        .grid-container-1x6 img {
+            width: 100%;
+            height: auto;
+        }
+
+        .panel-style {
+            background-color: #fafafa;
+            padding: 20px;
+            margin: 20px auto;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <section class="hero">
+        <div class="hero-body">
+            <div class="container is-max-desktop">
+                <div class="columns is-centered" style="margin-bottom: 0em">
+                    <div class="column is-max-desktop has-text-centered">
+                        <h1 class="title is-2 publication-title" style="margin-bottom:0rem">
+                            <img src="./static/images/matcha_icon.png" alt="ICON"
+                                style="max-width: 96px; vertical-align: middle;">
+                            <strong>MATCHA: Towards Matching Anything</strong>
+                        </h1>
+                    </div>
+                </div>
+                <div class="columns is-centered">
+                    <div class="column is-four-fifths has-text-centered">
+                        <div class="is-size-5 publication-authors">
+                            <span class="author-block">
+                                <a href="https://feixue94.github.io/">Fei
+                                    Xue</a><sup>1,3</sup></span>&nbsp;&nbsp;&nbsp;&nbsp;
+                            <span class="author-block">
+                                <a href="https://selflein.github.io/">Sven
+                                    Elflein</a><sup>2,3,4</sup>&nbsp;&nbsp;&nbsp;&nbsp;
+                            </span>
+                            <span class="author-block">
+                                <a href="https://dvl.in.tum.de/team/lealtaixe/">Laura Leal-Taixé</a>
+                                <sup>3</sup>&nbsp;&nbsp;&nbsp;&nbsp;
+                            </span>
+                            <span class="author-block">
+                                <a href="https://research.nvidia.com/labs/dvl/author/qunjie-zhou/">Qunjie Zhou</a><sup>3</sup>&nbsp;&nbsp;&nbsp;&nbsp;
+                            </span>
+                        </div>
+
+                        <div class="is-size-5 publication-authors">
+                            <span class="author-block"><sup>1</sup>University of Cambridge </span>
+                            &nbsp;&nbsp;&nbsp;&nbsp;
+                            <span class="author-block"><sup>2</sup>University of Toronto </span>
+                            &nbsp;&nbsp;
+                            <span class="author-block"><sup>3</sup>NVIDIA </span>
+                            &nbsp;&nbsp;
+                            <span class="author-block"><sup>4</sup>Vector Institute </span>
+
+                        </div>
+
+                        <br>
+                        <div class="columns is-centered" style="margin-bottom: 0em">
+                            <div class="column is-max-desktop has-text-centered">
+                                <h1 class="title is-4 publication-title" style="margin-bottom:0rem">
+                                    <strong>CVPR 2025 (Highlight)</strong>
+                                </h1>
+                            </div>
+                        </div>
+
+
+                        <div class="column has-text-centered">
+                            <div class="publication-links">
+                                <span class="link-block">
+                                    <a href="https://arxiv.org/pdf/2501.14945" class="external-link button is-normal is-rounded is-dark">
+                                        <span class="icon">
+                                            <i class="ai ai-arxiv"></i>
+                                        </span>
+                                        <span>arXiv</span>
+                                    </a>
+                                </span>
+                                <!-- Video Link. -->
+
+                                <span class="link-block">
+                                    <a href="interactive.html" target="_blank"
+                                        class="external-link button is-normal is-rounded is-dark">
+                                        <span class="icon">
+                                            <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 512 512"
+                                                style="fill: #ffdf0f">
+                                                <path
+                                                    d="M256 0c-25.3 0-47.2 14.7-57.6 36c-7-2.6-14.5-4-22.4-4c-35.3 0-64 28.7-64 64V261.5l-2.7-2.7c-25-25-65.5-25-90.5 0s-25 65.5 0 90.5L106.5 437c48 48 113.1 75 181 75H296h8c1.5 0 3-.1 4.5-.4c91.7-6.2 165-79.4 171.1-171.1c.3-1.5 .4-3 .4-4.5V160c0-35.3-28.7-64-64-64c-5.5 0-10.9 .7-16 2V96c0-35.3-28.7-64-64-64c-7.9 0-15.4 1.4-22.4 4C303.2 14.7 281.3 0 256 0zM240 96.1c0 0 0-.1 0-.1V64c0-8.8 7.2-16 16-16s16 7.2 16 16V95.9c0 0 0 .1 0 .1V232c0 13.3 10.7 24 24 24s24-10.7 24-24V96c0 0 0 0 0-.1c0-8.8 7.2-16 16-16s16 7.2 16 16v55.9c0 0 0 .1 0 .1v80c0 13.3 10.7 24 24 24s24-10.7 24-24V160.1c0 0 0-.1 0-.1c0-8.8 7.2-16 16-16s16 7.2 16 16V332.9c-.1 .6-.1 1.3-.2 1.9c-3.4 69.7-59.3 125.6-129 129c-.6 0-1.3 .1-1.9 .2H296h-8.5c-55.2 0-108.1-21.9-147.1-60.9L52.7 315.3c-6.2-6.2-6.2-16.4 0-22.6s16.4-6.2 22.6 0L119 336.4c6.9 6.9 17.2 8.9 26.2 5.2s14.8-12.5 14.8-22.2V96c0-8.8 7.2-16 16-16c8.8 0 16 7.1 16 15.9V232c0 13.3 10.7 24 24 24s24-10.7 24-24V96.1z">
+                                                </path>
+                                            </svg>
+                                        </span>
+                                        <span>Interactive Results</span>
+                                    </a>
+                                </span>
+                                <span class="link-block">
+                                    <a href="https://github.com/feixue94/matcha" class="external-link button is-normal is-rounded is-dark">
+                                        <span class="icon">
+                                            <i class="fab fa-github"></i>
+                                        </span>
+                                        <span>Code</span>
+                                    </a>
+                                </span>
+
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section has-background-light">
+        <div class="container is-max-desktop">
+            <div class="columns is-centered has-text-centered">
+                <div class="column is-four-fifths">
+                    <h2 class="title is-3">Abstract</h2>
+                    <div class="content has-text-justified">
+                        <p>
+                            Establishing correspondences across images is a fundamental
+                            challenge in computer vision, underpinning tasks
+                            like Structure-from-Motion, image editing, and point tracking.
+                            Traditional methods are often specialized for specific
+                            correspondence types, geometric, semantic, or temporal,
+                            whereas humans naturally identify alignments across these
+                            domains. Inspired by this flexibility, we propose <strong>MATCHA</strong>,
+                            a unified feature model designed to “rule them all”, establishing
+                            robust correspondences across diverse matching
+                            tasks. Building on insights that diffusion model features can
+                            encode multiple correspondence types, MATCHA augments
+                            this capacity by dynamically fusing high-level semantic and
+                            low-level geometric features through an attention-based
+                            module, creating expressive, versatile, and robust features.
+                            Additionally, MATCHA integrates object-level features from
+                            DINOv2 to further boost generalization, enabling a single
+                            feature capable of matching anything. Extensive experiments
+                            validate that MATCHA consistently surpasses state-of-
+                            the-art methods across geometric, semantic, and temporal
+                            matching tasks, setting a new foundation for a unified
+                            approach for the fundamental correspondence problem in
+                            computer vision. To the best of our knowledge, MATCHA
+                            is the first approach that is able to effectively tackle diverse
+                            matching tasks with a single unified feature.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div><br>
+    </section>
+
+        <section class="section">
+        <div class="container is-max-desktop">
+            <div class="columns is-centered has-text-centered">
+                <div class="column is-four-fifths">
+                    <h2 class="title is-3">Method Overview</h2>
+                    <div class="content has-text-centered">
+                        <div>
+                            <img src="./static/images/matcha_method_overview.png" alt="Architecture Overview"
+                                class="blend-img-background center-image" width="100%" loading="lazy" />
+                        </div>
+                        <div class="content has-text-justified">
+                            <p>
+                                MATCHA is built on top the Stable Diffusion (SD) and DINOv2 foundation models.
+                                Given an image, SD first extracts low- and high-level features with rich spatial and semantic information
+                                at different steps.
+
+                                Both features are dynamically fused with the attention mechanisms to augment each other with complementary information.
+                                The two augmented features are jointly supervised with ground-truth geometric and semantic correspsondences respectively, which improves their performance on geometric and semantic matching tasks significantly.
+                                Finally, features from DINOv2, which have rich object-level knowledge are statically fused with the two augmented features by concatenation along the channel dimension, resulting in a unified feature with spatial, semantic, and temporal knowledge.
+                            </p>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <br>
+
+    <section class="section">
+    <div class="container is-max-desktop">
+        <div class="columns is-centered has-text-centered">
+            <div class="column is-four-fifths">
+                <h2 class="title is-3">Results</h2>
+                <p>
+                    MATCHA tackles various matching tasks. Select each tab below to explore the results for
+                    each task.
+                </p>
+                <nav>
+                    <ul>
+                        <li><a id="nav1" href="javascript:void(0);" onclick="showSection('semantic_matching', 'result_section');setActive('nav1');">Semantic Matching</a></li>
+                        <li><a id="nav2" href="javascript:void(0);" onclick="showSection('geometric_matching', 'result_section');setActive('nav2');">Geometric Matching</a></li>
+                        <li><a id="nav3" href="javascript:void(0);" onclick="showSection('temporal_matching', 'result_section');setActive('nav3');">Temporal Matching</a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+            <script>
+                function setActive(activeId) {
+                    // Remove 'active' class from all links
+                    document.querySelectorAll('nav ul li a').forEach(function(link) {
+                        link.classList.remove('active');
+                    });
+                
+                    // Add 'active' class to the clicked link
+                    document.getElementById(activeId).classList.add('active');
+                }
+                </script>
+        </div>
+
+    </div>
+
+
+<!--geometric matching video-->
+    <section id="geometric_matching" class="section result_section">
+        <div class="container is-max-desktop">
+            <div class="columns is-centered has-text-centered">
+                <div class="column is-full panel-style">
+                    <h2 class="title is-4">Geometric Matching</h2>
+                    <p style="max-width: 90%; margin: 0 auto; text-align: center;">
+                        MATCHA performs geometric matching in both outdoor and indoor environments and supports all keypoint detectors (e.g., Superpoint and DISK).
+                    </p>
+                    <br>
+                    <video width="90%" controls preload="none" poster="./static/images/matcha_geo_vis.png">
+                        <source src="./static/videos/matcha_geo_vis.mp4" type="video/mp4">
+                    </video>
+                </div>
+            </div>
+        </div><br>
+    </section>
+
+        <!--temporal matching video-->
+    <section id="semantic_matching" class="section result_section">
+        <div class="container is-max-desktop">
+            <div class="columns is-centered has-text-centered">
+                <div class="column is-full panel-style">
+                    <h2 class="title is-4">Semantic Matching</h2>
+                    <p style="max-width: 90%; margin: 0 auto; text-align: center;">
+                        MATCHA performs semantic matching for various objects.
+                    </p>
+                    <br>
+                    <video width="90%" controls preload="none" poster="./static/images/matcha_sem_vis.png">
+                        <source src="./static/videos/matcha_sem_vis.mp4" type="video/mp4">
+                    </video>
+                </div>
+            </div>
+        </div><br>
+    </section>
+
+<!--temporal matching video-->
+    <section id="temporal_matching" class="section result_section">
+        <div class="container is-max-desktop">
+            <div class="columns is-centered has-text-centered">
+                <div class="column is-full panel-style">
+                    <h2 class="title is-4">Temporal Matching</h2>
+                    <p style="max-width: 90%; margin: 0 auto; text-align: center;">
+                        MATCHA performs temporal matching by finding correspondences between the first and all following frames.
+                    </p>
+                    <br>
+                    <video width="90%" controls preload="none" poster="./static/images/matcha_tem_vis.png">
+                        <source src="./static/videos/matcha_tem_vis.mp4" type="video/mp4">
+                    </video>
+                </div>
+            </div>
+        </div><br>
+    </section>
+
+    <section class="section">
+    <div class="container is-max-desktop">
+        <div class="columns is-centered has-text-centered">
+            <div class="column is-four-fifths">
+                <h2 class="title is-3">Comparison with Previous Methods</h2>
+                <p>
+                    MATCHA tackles various matching tasks. Select each tab below to explore the results for
+                    each task.
+                </p>
+                <nav>
+                    <ul>
+                        <li><a id="nav4" href="javascript:void(0);" onclick="showSection('comp_heatmap', 'compare_section');setActive('nav4');">Comparison of Heatmap</a>
+                        <li><a id="nav5" href="javascript:void(0);" onclick="showSection('comp_sem_matching', 'compare_section');setActive('nav5');">Comparison of Semantic Matching</a></li>
+                        <li><a id="nav6" href="javascript:void(0);" onclick="showSection('comp_geo_matching', 'compare_section');setActive('nav6');">Comparison of Geometric Matching</a></li>
+                        <li><a id="nav7" href="javascript:void(0);" onclick="showSection('comp_tem_matching', 'compare_section');setActive('nav7');">Comparison of Temporal Matching</a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+            <script>
+                function setActive(activeId) {
+                    // Remove 'active' class from all links
+                    document.querySelectorAll('nav ul li a').forEach(function(link) {
+                        link.classList.remove('active');
+                    });
+
+                    // Add 'active' class to the clicked link
+                    document.getElementById(activeId).classList.add('active');
+                }
+                </script>
+        </div>
+    </div>
+<!--            <script defer src="./static/js/nav_comp.js"></script>-->
+
+<!--compare heatmap video-->
+    <section id="comp_heatmap" class="section compare_section">
+        <div class="container is-max-desktop">
+            <div class="columns is-centered has-text-centered">
+                <div class="column is-full panel-style">
+                    <h2 class="title is-4">Comparison of Heatmap</h2>
+                    <p style="max-width: 90%; margin: 0 auto; text-align: center;">
+                        Given a query point from the source image, we visualize the heatmap on the target image and the predicted closest retrieval point.
+                    </p>
+                    <br>
+                    <video width="90%" controls preload="none" poster="./static/images/comp_heatmap_vis_video.png">
+                        <source src="./static/videos/comp_heatmap_vis_video.mp4" type="video/mp4">
+                    </video>
+                </div>
+            </div>
+        </div><br>
+    </section>
+
+        <!--compare semantic matching video-->
+    <section id="comp_sem_matching" class="section compare_section">
+        <div class="container is-max-desktop">
+            <div class="columns is-centered has-text-centered">
+                <div class="column is-full panel-style">
+                    <h2 class="title is-4">Comparison of Semantic Matching</h2>
+                    <p style="max-width: 90%; margin: 0 auto; text-align: center;">
+                        We visualize the inliers (green) and outliers (red) of semantic matching.
+                    </p>
+                    <br>
+                    <video width="90%" controls preload="none" poster="./static/images/comp_sem_vis_video.png">
+                        <source src="./static/videos/comp_sem_vis_video.mp4" type="video/mp4">
+                    </video>
+                </div>
+            </div>
+        </div><br>
+    </section>
+
+<!--compare geometric matching video-->
+    <section id="comp_geo_matching" class="section compare_section">
+        <div class="container is-max-desktop">
+            <div class="columns is-centered has-text-centered">
+                <div class="column is-full panel-style">
+                    <h2 class="title is-4">Comparison of Geometric Matching</h2>
+                    <p style="max-width: 90%; margin: 0 auto; text-align: center;">
+                        We visualize the inliers after PnP + RANSAC of geometric matching.
+                    </p>
+                    <br>
+                    <video width="90%" controls preload="none" poster="./static/images/comp_geo_vis_video.png">
+                        <source src="./static/videos/comp_geo_vis_video.mp4" type="video/mp4">
+                    </video>
+                </div>
+            </div>
+        </div><br>
+    </section>
+
+<!--compare temporal matching video-->
+    <section id="comp_tem_matching" class="section compare_section">
+        <div class="container is-max-desktop">
+            <div class="columns is-centered has-text-centered">
+                <div class="column is-full panel-style">
+                    <h2 class="title is-4">Comparison of Temporal Matching</h2>
+                    <p style="max-width: 90%; margin: 0 auto; text-align: center;">
+                        We visualize the inliers (green) and outliers (red) of temporal matching.
+                    </p>
+                    <br>
+                    <video width="90%" controls preload="none" poster="./static/images/comp_tem_vis_video.png">
+                        <source src="./static/videos/comp_tem_vis_video.mp4" type="video/mp4">
+                    </video>
+                </div>
+            </div>
+        </div><br>
+    </section>
+
+        <script defer src="./static/js/nav.js"></script>
+
+
+    <br>
+
+
+
+
+    <section class="section" id="BibTeX">
+        <div class="container is-max-desktop">
+            <div class="columns is-centered has-text-justified">
+                <div class="column is-four-fifths">
+
+                    <h2 class="title">BibTeX</h2>
+                    <pre><code>
+    @inproceedings{matcha,
+        Author = {Fei Xue and Sven Elflein and Laura Leal-Taixé and Qunjie Zhou},
+        Title = {MATCHA: Towards Matching Anything},
+        Year = {2025},
+          booktitle={CVPR},
+        }
+                    </code></pre>
+
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <footer class="footer">
+        <div align="center" class="container">
+            <div class="columns is-centered">
+                <div class="content">
+                    Design borrowed from <a href="https://github.com/nerfies/nerfies.github.io">nerfies</a>.
+                </div>
+            </div>
+        </div>
+    </footer>
+
+</body>
+
+</html>
